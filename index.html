@@ -1,9 +1,12 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ETHULL | NFT Mint</title>
-  <meta name="description" content="Mint ETHULL NFTs on Ethereum using MetaMask." />  <style>
+  <meta name="description" content="Mint ETHULL NFTs on Ethereum using MetaMask." />
+
+  <style>
     :root {
       --bg: #080a18;
       --bg-2: #101631;
@@ -351,6 +354,10 @@
     }
 
     @media (max-width: 880px) {
+      .page {
+        width: min(100% - 24px, 1180px);
+      }
+
       .hero,
       .mint-panel {
         grid-template-columns: 1fr;
@@ -361,14 +368,81 @@
       }
 
       .nav {
-        align-items: flex-start;
+        align-items: center;
       }
 
       .brand {
-        font-size: 30px;
+        font-size: 28px;
+      }
+
+      .wallet-btn {
+        max-width: 155px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 11px 14px;
+        font-size: 13px;
+      }
+
+      .hero {
+        padding-top: 34px;
+      }
+
+      .art-card {
+        padding: 18px;
+      }
+
+      .art-inner {
+        min-height: 300px;
+      }
+
+      .mint-card {
+        padding: 22px;
       }
     }
-  </style></head>
+
+    @media (max-width: 520px) {
+      body {
+        width: 100%;
+      }
+
+      .stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .stat {
+        padding: 12px;
+        border-radius: 18px;
+      }
+
+      .stat strong {
+        font-size: 20px;
+        word-break: break-word;
+      }
+
+      .stat span {
+        font-size: 11px;
+      }
+
+      .mint-panel {
+        gap: 18px;
+      }
+
+      .quantity-row {
+        flex-direction: row;
+      }
+
+      input[type="number"] {
+        width: 74px;
+      }
+
+      .footer-inner {
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
 <body>
   <header>
     <div class="page nav">
@@ -387,7 +461,9 @@
       </a>
       <button id="connectWallet" class="wallet-btn">Connect Wallet</button>
     </div>
-  </header>  <main class="page">
+  </header>
+
+  <main class="page">
     <section class="hero">
       <div>
         <div class="eyebrow">Ethereum Powered NFT Collection</div>
@@ -397,64 +473,67 @@
         </p>
         <p class="intro">
           NFTs, or non-fungible tokens, bring uniqueness to the blockchain. Each ETHULL NFT represents a distinct digital collectible inspired by Ethereum’s iconic identity, combining transparent ownership, verifiable scarcity, and community-driven culture. Connect your MetaMask wallet, choose your mint type, and become part of the ETHULL collection.
-        </p><div class="stats">
-      <div class="stat">
-        <strong id="totalSupplyLabel">100</strong>
-        <span>Total Supply</span>
-      </div>
-      <div class="stat">
-        <strong id="totalMintedLabel">--</strong>
-        <span>Total Minted</span>
-      </div>
-      <div class="stat">
-        <strong>0.0001 ETH</strong>
-        <span>Paid Mint Price</span>
-      </div>
-    </div>
-  </div>
+        </p>
 
-  <div class="art-card">
-    <div class="art-inner">
-      <svg class="eth-logo" width="200" height="320" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
-        <title>Ethereum Logo</title>
-        <polygon points="100,0 20,160 100,120 180,160" fill="#627EEA"/>
-        <polygon points="100,0 100,120 180,160" fill="#8A92B2"/>
-        <polygon points="20,175 100,320 100,220" fill="#627EEA"/>
-        <polygon points="180,175 100,320 100,220" fill="#8A92B2"/>
-        <polygon points="20,160 100,120 100,220" fill="#454A75"/>
-        <polygon points="180,160 100,120 100,220" fill="#62688F"/>
-      </svg>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="mint">
-  <div class="mint-panel">
-    <div class="mint-card">
-      <h2>Free Mint</h2>
-      <p>Mint between 1 and 5 ETHULL NFTs from your wallet for free. Gas fees still apply because every blockchain transaction requires network gas.</p>
-      <div class="quantity-row">
-        <label for="freeAmount">Amount</label>
-        <input id="freeAmount" type="number" min="1" max="5" value="1" />
+        <div class="stats">
+          <div class="stat">
+            <strong id="totalSupplyLabel">100</strong>
+            <span>Total Supply</span>
+          </div>
+          <div class="stat">
+            <strong id="totalMintedLabel">--</strong>
+            <span>Total Minted</span>
+          </div>
+          <div class="stat">
+            <strong>0.0001 ETH</strong>
+            <span>Paid Mint Price</span>
+          </div>
+        </div>
       </div>
-      <button id="freeMintBtn" class="mint-btn">Free Mint</button>
-    </div>
 
-    <div class="mint-card">
-      <h2>Paid Mint</h2>
-      <p>Mint between 1 and 10 ETHULL NFTs for 0.0001 ETH each. Make sure your MetaMask wallet is connected to the correct network.</p>
-      <div class="quantity-row">
-        <label for="paidAmount">Amount</label>
-        <input id="paidAmount" type="number" min="1" max="10" value="1" />
+      <div class="art-card">
+        <div class="art-inner">
+          <svg class="eth-logo" width="200" height="320" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
+            <title>Ethereum Logo</title>
+            <polygon points="100,0 20,160 100,120 180,160" fill="#627EEA"/>
+            <polygon points="100,0 100,120 180,160" fill="#8A92B2"/>
+            <polygon points="20,175 100,320 100,220" fill="#627EEA"/>
+            <polygon points="180,175 100,320 100,220" fill="#8A92B2"/>
+            <polygon points="20,160 100,120 100,220" fill="#454A75"/>
+            <polygon points="180,160 100,120 100,220" fill="#62688F"/>
+          </svg>
+        </div>
       </div>
-      <button id="paidMintBtn" class="mint-btn paid">Paid Mint</button>
-    </div>
-  </div>
+    </section>
 
-  <div id="status" class="notice">Connect your MetaMask wallet to start minting.</div>
-</section>
+    <section class="section" id="mint">
+      <div class="mint-panel">
+        <div class="mint-card">
+          <h2>Free Mint</h2>
+          <p>Mint between 1 and 5 ETHULL NFTs from your wallet for free. Gas fees still apply because every blockchain transaction requires network gas.</p>
+          <div class="quantity-row">
+            <label for="freeAmount">Amount</label>
+            <input id="freeAmount" type="number" min="1" max="5" value="1" />
+          </div>
+          <button id="freeMintBtn" class="mint-btn">Free Mint</button>
+        </div>
 
-  </main>  <footer>
+        <div class="mint-card">
+          <h2>Paid Mint</h2>
+          <p>Mint between 1 and 10 ETHULL NFTs for 0.0001 ETH each. Make sure your MetaMask wallet is connected to the correct network.</p>
+          <div class="quantity-row">
+            <label for="paidAmount">Amount</label>
+            <input id="paidAmount" type="number" min="1" max="10" value="1" />
+          </div>
+          <button id="paidMintBtn" class="mint-btn paid">Paid Mint</button>
+        </div>
+      </div>
+
+      <div id="status" class="notice">Connect your MetaMask wallet to start minting.</div>
+    </section>
+  </main>
+
+  <footer>
     <div class="page footer-inner">
       <div>© <span id="year"></span> ETHULL. All rights reserved.</div>
       <div class="socials">
@@ -464,7 +543,9 @@
         <a href="https://facebook.com/yourpage" target="_blank" rel="noopener">Facebook</a>
       </div>
     </div>
-  </footer>  <script type="module">
+  </footer>
+
+  <script type="module">
     import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.13.4/+esm";
 
     /************************************************************
@@ -477,737 +558,13 @@
      * This minimal ABI works for the contract I gave you earlier.
      * If your real ABI has different function names, replace this ABI.
      ************************************************************/
-    const CONTRACT_ABI = [
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "approve",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"inputs": [],
-		"name": "ERC721EnumerableForbiddenBatchMint",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"name": "ERC721IncorrectOwner",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "operator",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "ERC721InsufficientApproval",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "approver",
-				"type": "address"
-			}
-		],
-		"name": "ERC721InvalidApprover",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "operator",
-				"type": "address"
-			}
-		],
-		"name": "ERC721InvalidOperator",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"name": "ERC721InvalidOwner",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "receiver",
-				"type": "address"
-			}
-		],
-		"name": "ERC721InvalidReceiver",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			}
-		],
-		"name": "ERC721InvalidSender",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "ERC721NonexistentToken",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			}
-		],
-		"name": "ERC721OutOfBoundsIndex",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"name": "OwnableInvalidOwner",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "OwnableUnauthorizedAccount",
-		"type": "error"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "approved",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "Approval",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "operator",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "bool",
-				"name": "approved",
-				"type": "bool"
-			}
-		],
-		"name": "ApprovalForAll",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "freeMint",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "OwnershipTransferred",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "paidMint",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "safeTransferFrom",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bytes",
-				"name": "data",
-				"type": "bytes"
-			}
-		],
-		"name": "safeTransferFrom",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "operator",
-				"type": "address"
-			},
-			{
-				"internalType": "bool",
-				"name": "approved",
-				"type": "bool"
-			}
-		],
-		"name": "setApprovalForAll",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "Transfer",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "transferFrom",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "withdraw",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"name": "balanceOf",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "FREE_MINT_LIMIT",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "freeMinted",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "getApproved",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "operator",
-				"type": "address"
-			}
-		],
-		"name": "isApprovedForAll",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "MAX_SUPPLY",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "name",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "ownerOf",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "PAID_MINT_LIMIT",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "PAID_MINT_PRICE",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "paidMinted",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes4",
-				"name": "interfaceId",
-				"type": "bytes4"
-			}
-		],
-		"name": "supportsInterface",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "symbol",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			}
-		],
-		"name": "tokenByIndex",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			}
-		],
-		"name": "tokenOfOwnerByIndex",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "tokenURI",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "totalMinted",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "totalSupply",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	}
-];
+    const CONTRACT_ABI = 
       "function freeMint(uint256 amount) external",
       "function paidMint(uint256 amount) external payable",
       "function totalMinted() view returns (uint256)",
-      "function MAX_SUPPLY() view returns (uint256)"
+      "function totalSupply() view returns (uint256)",
+      "function MAX_SUPPLY() view returns (uint256)",
+      "function PAID_MINT_PRICE() view returns (uint256)"
     ];
 
     const PAID_MINT_PRICE_ETH = "0.0001";
@@ -1343,5 +700,6 @@
       window.ethereum.on("accountsChanged", () => window.location.reload());
       window.ethereum.on("chainChanged", () => window.location.reload());
     }
-  </script></body>
+  </script>
+</body>
 </html>
