@@ -1,0 +1,1347 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ETHULL | NFT Mint</title>
+  <meta name="description" content="Mint ETHULL NFTs on Ethereum using MetaMask." />  <style>
+    :root {
+      --bg: #080a18;
+      --bg-2: #101631;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.15);
+      --text: #ffffff;
+      --muted: #c8d0ff;
+      --primary: #627eea;
+      --primary-2: #8a92b2;
+      --accent: #9ffcff;
+      --danger: #ff6b8a;
+      --success: #60f7a2;
+      --shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 15%, rgba(98, 126, 234, 0.35), transparent 28%),
+        radial-gradient(circle at 85% 10%, rgba(159, 252, 255, 0.18), transparent 22%),
+        radial-gradient(circle at 50% 95%, rgba(138, 146, 178, 0.18), transparent 30%),
+        linear-gradient(135deg, var(--bg), #050610 60%, #111632);
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(8, 10, 24, 0.75);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 20px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 950;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(98, 126, 234, 0.95), rgba(159, 252, 255, 0.35));
+      box-shadow: 0 0 32px rgba(98, 126, 234, 0.45);
+    }
+
+    .brand-mark svg {
+      width: 24px;
+      height: 34px;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      color: var(--text);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    .wallet-btn,
+    .mint-btn {
+      border-radius: 999px;
+      padding: 13px 20px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), #2f46c7);
+      box-shadow: 0 12px 36px rgba(98, 126, 234, 0.38);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .wallet-btn:hover,
+    .mint-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 48px rgba(98, 126, 234, 0.5);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 36px;
+      align-items: center;
+      padding: 76px 0 52px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid rgba(159, 252, 255, 0.28);
+      border-radius: 999px;
+      color: var(--accent);
+      background: rgba(159, 252, 255, 0.08);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(44px, 8vw, 92px);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+      margin-bottom: 24px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff, #9ffcff 42%, #627eea);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .intro {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.8;
+      max-width: 720px;
+      margin-bottom: 24px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .stat {
+      padding: 18px;
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 28px;
+      margin-bottom: 4px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .art-card {
+      position: relative;
+      padding: 34px;
+      border: 1px solid var(--card-border);
+      border-radius: 36px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.04));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .art-card::before {
+      content: "";
+      position: absolute;
+      inset: -80px;
+      background: conic-gradient(from 120deg, transparent, rgba(98, 126, 234, 0.35), transparent, rgba(159, 252, 255, 0.22), transparent);
+      animation: spin 14s linear infinite;
+      opacity: 0.55;
+    }
+
+    .art-inner {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 440px;
+      border-radius: 28px;
+      background: rgba(5, 6, 16, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .eth-logo {
+      width: min(210px, 55vw);
+      filter: drop-shadow(0 0 38px rgba(98, 126, 234, 0.65));
+      animation: float 4.5s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-16px); }
+    }
+
+    .section {
+      padding: 42px 0 78px;
+    }
+
+    .mint-panel {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .mint-card {
+      padding: 28px;
+      border: 1px solid var(--card-border);
+      border-radius: 30px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.045));
+      box-shadow: var(--shadow);
+    }
+
+    .mint-card h2 {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .mint-card p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .quantity-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+      padding: 12px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .quantity-row label {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    input[type="number"] {
+      width: 100px;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
+      color: var(--text);
+      background: rgba(5, 6, 16, 0.74);
+      font-size: 16px;
+      font-weight: 800;
+      text-align: center;
+      outline: none;
+    }
+
+    .mint-btn {
+      width: 100%;
+      padding: 15px 20px;
+      font-size: 16px;
+    }
+
+    .paid {
+      background: linear-gradient(135deg, #9ffcff, #627eea);
+      color: #071020;
+    }
+
+    .notice {
+      margin-top: 22px;
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--muted);
+      line-height: 1.6;
+      min-height: 58px;
+    }
+
+    .notice.success { color: var(--success); }
+    .notice.error { color: var(--danger); }
+
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 34px 0;
+      background: rgba(0, 0, 0, 0.18);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      color: var(--muted);
+    }
+
+    .socials {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .socials a {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-weight: 800;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .socials a:hover {
+      transform: translateY(-2px);
+      background: rgba(98, 126, 234, 0.24);
+    }
+
+    @media (max-width: 880px) {
+      .hero,
+      .mint-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        align-items: flex-start;
+      }
+
+      .brand {
+        font-size: 30px;
+      }
+    }
+  </style></head>
+<body>
+  <header>
+    <div class="page nav">
+      <a class="brand" href="#">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="100,0 20,160 100,120 180,160" fill="#ffffff"/>
+            <polygon points="100,0 100,120 180,160" fill="#c9d0ff"/>
+            <polygon points="20,175 100,320 100,220" fill="#ffffff"/>
+            <polygon points="180,175 100,320 100,220" fill="#c9d0ff"/>
+            <polygon points="20,160 100,120 100,220" fill="#8a92b2"/>
+            <polygon points="180,160 100,120 100,220" fill="#627eea"/>
+          </svg>
+        </span>
+        ETHULL
+      </a>
+      <button id="connectWallet" class="wallet-btn">Connect Wallet</button>
+    </div>
+  </header>  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Ethereum Powered NFT Collection</div>
+        <h1><span class="gradient-text">Mint ETHULL</span><br />Own the Chain</h1>
+        <p class="intro">
+          Cryptocurrency has transformed the internet into an open financial network where value can move globally without traditional boundaries. Ethereum expanded that vision by introducing smart contracts: self-executing programs that power decentralized apps, digital ownership, gaming assets, tokenized communities, and creative economies.
+        </p>
+        <p class="intro">
+          NFTs, or non-fungible tokens, bring uniqueness to the blockchain. Each ETHULL NFT represents a distinct digital collectible inspired by Ethereum’s iconic identity, combining transparent ownership, verifiable scarcity, and community-driven culture. Connect your MetaMask wallet, choose your mint type, and become part of the ETHULL collection.
+        </p><div class="stats">
+      <div class="stat">
+        <strong id="totalSupplyLabel">100</strong>
+        <span>Total Supply</span>
+      </div>
+      <div class="stat">
+        <strong id="totalMintedLabel">--</strong>
+        <span>Total Minted</span>
+      </div>
+      <div class="stat">
+        <strong>0.0001 ETH</strong>
+        <span>Paid Mint Price</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="art-card">
+    <div class="art-inner">
+      <svg class="eth-logo" width="200" height="320" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
+        <title>Ethereum Logo</title>
+        <polygon points="100,0 20,160 100,120 180,160" fill="#627EEA"/>
+        <polygon points="100,0 100,120 180,160" fill="#8A92B2"/>
+        <polygon points="20,175 100,320 100,220" fill="#627EEA"/>
+        <polygon points="180,175 100,320 100,220" fill="#8A92B2"/>
+        <polygon points="20,160 100,120 100,220" fill="#454A75"/>
+        <polygon points="180,160 100,120 100,220" fill="#62688F"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="mint">
+  <div class="mint-panel">
+    <div class="mint-card">
+      <h2>Free Mint</h2>
+      <p>Mint between 1 and 5 ETHULL NFTs from your wallet for free. Gas fees still apply because every blockchain transaction requires network gas.</p>
+      <div class="quantity-row">
+        <label for="freeAmount">Amount</label>
+        <input id="freeAmount" type="number" min="1" max="5" value="1" />
+      </div>
+      <button id="freeMintBtn" class="mint-btn">Free Mint</button>
+    </div>
+
+    <div class="mint-card">
+      <h2>Paid Mint</h2>
+      <p>Mint between 1 and 10 ETHULL NFTs for 0.0001 ETH each. Make sure your MetaMask wallet is connected to the correct network.</p>
+      <div class="quantity-row">
+        <label for="paidAmount">Amount</label>
+        <input id="paidAmount" type="number" min="1" max="10" value="1" />
+      </div>
+      <button id="paidMintBtn" class="mint-btn paid">Paid Mint</button>
+    </div>
+  </div>
+
+  <div id="status" class="notice">Connect your MetaMask wallet to start minting.</div>
+</section>
+
+  </main>  <footer>
+    <div class="page footer-inner">
+      <div>© <span id="year"></span> ETHULL. All rights reserved.</div>
+      <div class="socials">
+        <!-- Change these links whenever you want -->
+        <a href="https://instagram.com/yourpage" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://wa.me/0000000000" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://facebook.com/yourpage" target="_blank" rel="noopener">Facebook</a>
+      </div>
+    </div>
+  </footer>  <script type="module">
+    import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.13.4/+esm";
+
+    /************************************************************
+     * STEP 1: Paste your deployed contract address below.
+     ************************************************************/
+    const CONTRACT_ADDRESS = "0xf560Ad4c65C6E3D2A08DbF1E73b664289e02500e";
+
+    /************************************************************
+     * STEP 2: Paste your ABI below.
+     * This minimal ABI works for the contract I gave you earlier.
+     * If your real ABI has different function names, replace this ABI.
+     ************************************************************/
+    const CONTRACT_ABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "ERC721EnumerableForbiddenBatchMint",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "ERC721IncorrectOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ERC721InsufficientApproval",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "approver",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidApprover",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidOperator",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidReceiver",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidSender",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ERC721NonexistentToken",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "ERC721OutOfBoundsIndex",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "OwnableInvalidOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "OwnableUnauthorizedAccount",
+		"type": "error"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "approved",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "approved",
+				"type": "bool"
+			}
+		],
+		"name": "ApprovalForAll",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "freeMint",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "paidMint",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "safeTransferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes",
+				"name": "data",
+				"type": "bytes"
+			}
+		],
+		"name": "safeTransferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "approved",
+				"type": "bool"
+			}
+		],
+		"name": "setApprovalForAll",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "FREE_MINT_LIMIT",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "freeMinted",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "getApproved",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			}
+		],
+		"name": "isApprovedForAll",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "MAX_SUPPLY",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ownerOf",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "PAID_MINT_LIMIT",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "PAID_MINT_PRICE",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "paidMinted",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes4",
+				"name": "interfaceId",
+				"type": "bytes4"
+			}
+		],
+		"name": "supportsInterface",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "tokenByIndex",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "tokenOfOwnerByIndex",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "tokenURI",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalMinted",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+      "function freeMint(uint256 amount) external",
+      "function paidMint(uint256 amount) external payable",
+      "function totalMinted() view returns (uint256)",
+      "function MAX_SUPPLY() view returns (uint256)"
+    ];
+
+    const PAID_MINT_PRICE_ETH = "0.0001";
+
+    const connectWalletBtn = document.getElementById("connectWallet");
+    const freeMintBtn = document.getElementById("freeMintBtn");
+    const paidMintBtn = document.getElementById("paidMintBtn");
+    const freeAmountInput = document.getElementById("freeAmount");
+    const paidAmountInput = document.getElementById("paidAmount");
+    const statusBox = document.getElementById("status");
+    const totalMintedLabel = document.getElementById("totalMintedLabel");
+    const totalSupplyLabel = document.getElementById("totalSupplyLabel");
+
+    let provider;
+    let signer;
+    let contract;
+    let connectedAccount;
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function shortAddress(address) {
+      return `${address.slice(0, 6)}...${address.slice(-4)}`;
+    }
+
+    function setStatus(message, type = "") {
+      statusBox.textContent = message;
+      statusBox.className = `notice ${type}`;
+    }
+
+    function validateContractSetup() {
+      if (!CONTRACT_ADDRESS || CONTRACT_ADDRESS === "PASTE_YOUR_CONTRACT_ADDRESS_HERE") {
+        throw new Error("Please paste your contract address inside index.html first.");
+      }
+    }
+
+    function getMintAmount(input, min, max) {
+      const amount = Number(input.value);
+      if (!Number.isInteger(amount) || amount < min || amount > max) {
+        throw new Error(`Amount must be between ${min} and ${max}.`);
+      }
+      return amount;
+    }
+
+    async function connectWallet() {
+      try {
+        validateContractSetup();
+
+        if (!window.ethereum) {
+          throw new Error("MetaMask not found. Please install MetaMask and refresh this page.");
+        }
+
+        provider = new ethers.BrowserProvider(window.ethereum);
+        const accounts = await provider.send("eth_requestAccounts", []);
+        connectedAccount = accounts[0];
+        signer = await provider.getSigner();
+        contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+        connectWalletBtn.textContent = `Wallet Connected: ${shortAddress(connectedAccount)}`;
+        setStatus("Wallet connected successfully. You can now mint ETHULL NFTs.", "success");
+
+        await refreshMintStats();
+      } catch (error) {
+        setStatus(error.message || "Wallet connection failed.", "error");
+      }
+    }
+
+    async function ensureConnected() {
+      if (!contract || !connectedAccount) {
+        await connectWallet();
+      }
+    }
+
+    async function refreshMintStats() {
+      try {
+        if (!contract) return;
+
+        const minted = await contract.totalMinted();
+        totalMintedLabel.textContent = minted.toString();
+
+        try {
+          const maxSupply = await contract.MAX_SUPPLY();
+          totalSupplyLabel.textContent = maxSupply.toString();
+        } catch {
+          totalSupplyLabel.textContent = "100";
+        }
+      } catch {
+        totalMintedLabel.textContent = "--";
+      }
+    }
+
+    async function freeMint() {
+      try {
+        await ensureConnected();
+        const amount = getMintAmount(freeAmountInput, 1, 5);
+
+        setStatus("Opening MetaMask. Please confirm your free mint transaction...");
+        const tx = await contract.freeMint(amount);
+
+        setStatus("Transaction sent. Waiting for blockchain confirmation...");
+        await tx.wait();
+
+        setStatus(`Success! You free minted ${amount} ETHULL NFT(s).`, "success");
+        await refreshMintStats();
+      } catch (error) {
+        setStatus(error.reason || error.shortMessage || error.message || "Free mint failed.", "error");
+      }
+    }
+
+    async function paidMint() {
+      try {
+        await ensureConnected();
+        const amount = getMintAmount(paidAmountInput, 1, 10);
+        const value = ethers.parseEther(PAID_MINT_PRICE_ETH) * BigInt(amount);
+
+        setStatus("Opening MetaMask. Please confirm your paid mint transaction...");
+        const tx = await contract.paidMint(amount, { value });
+
+        setStatus("Transaction sent. Waiting for blockchain confirmation...");
+        await tx.wait();
+
+        setStatus(`Success! You paid minted ${amount} ETHULL NFT(s).`, "success");
+        await refreshMintStats();
+      } catch (error) {
+        setStatus(error.reason || error.shortMessage || error.message || "Paid mint failed.", "error");
+      }
+    }
+
+    connectWalletBtn.addEventListener("click", connectWallet);
+    freeMintBtn.addEventListener("click", freeMint);
+    paidMintBtn.addEventListener("click", paidMint);
+
+    if (window.ethereum) {
+      window.ethereum.on("accountsChanged", () => window.location.reload());
+      window.ethereum.on("chainChanged", () => window.location.reload());
+    }
+  </script></body>
+</html>
